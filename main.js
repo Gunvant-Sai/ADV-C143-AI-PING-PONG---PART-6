@@ -1,5 +1,4 @@
 img = "";
-pingY="";
 rightWristY = 0;
 rightWristX = 0;
 score_right_wrist = 0;
@@ -60,44 +59,22 @@ function modelLoaded() {
   missed = loadSound("missed.wav");
     WristPRO = loadImage("https://i.postimg.cc/RVws1Zsy/clownnose.png");
   }
-
+  function startGame()
+  {
+    game_status = "start";
+    document.getElementById("status").innerHTML = "Game is Loaded";
+  }
 function draw(){ 
+  if(game_status == "start")
+  {
   background("#D3D3D3");
-    if(rightWristY > 150)
-    {
-      if(pingY < 330)
-        {
-         pingY = pingY+1; 
-        }
-    }
-  
+  image(video,0,0,700,600);
+      
     if(score_right_wrist > 0.2)
   {
     fill("orange");
     stroke("orange");
     circle(rightWristX, rightWristY, 30);
-  }
-
-  if(rightWristY < 150)
-    {
-      if(pingY > 0)
-        {
-         pingY = pingY-1; 
-        }
-    }
-
-    function startGame()
-  {
-    game_status = "start";
-    document.getElementById("status").innerHTML = "Game is Loaded";
-  }
-
-    
-  image(img,pingY, 40,70);
-  image(WristPRO , rightWristY, 20 , 20); 
-
-  if(gameConfig.status==='start'){
-    status1 = true;
   }
 
  fill("black");
@@ -115,7 +92,7 @@ function draw(){
    fill(250,0,0);
     stroke(0,0,250);
     strokeWeight(0.5);
-   paddle1Y = mouseY; 
+   paddle1Y = rightWristY; 
    rect(paddle1X,paddle1Y,paddle1,paddle1Height,100);
    
    
@@ -135,6 +112,7 @@ function draw(){
    
    //function move call which in very important
     move();
+}
 }
 
 
@@ -184,9 +162,10 @@ function move(){
    if(ball.x+ball.r>width-ball.r/2){
        ball.dx=-ball.dx-0.5;       
    }
-  if (ball.x-2.5*ball.r/2< 0){
-  if (ball.y >= paddle1Y&& ball.y <= paddle1Y + paddle1Height) {
-    ball.dx = -ball.dx+0.5; 
+   if (ball.x-2.5*ball.r/2< 0){
+    if (ball.y >= paddle1Y&& ball.y <= paddle1Y + paddle1Height) {
+      ball.dx = -ball.dx+0.5; 
+      ball_touch_paddel.play(); 
   }
   else{
     pcscore++;
@@ -202,7 +181,7 @@ if(pcscore ==4){
     stroke("white");
     textSize(25)
     text("Game Over!☹☹",width/2,height/2);
-    text("Reload The Page!",width/2,height/2+30)
+    text("Press Restart to Play again",width/2,height/2+30)
     noLoop();
     pcscore = 0;
 }
@@ -225,10 +204,10 @@ function models(){
 
 //this function help to not go te paddle out of canvas
 function paddleInCanvas(){
-  if(mouseY+paddle1Height > height){
-    mouseY=height-paddle1Height;
+  if(rightWristY+paddle1Height > height){
+    rightWristY=height-paddle1Height;
   }
-  if(mouseY < 0){
-    mouseY =0;
+  if(rightWristY < 0){
+    rightWristY =0;
   }  
 }
